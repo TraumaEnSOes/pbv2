@@ -1,6 +1,7 @@
 add_executable( test
-    tests/InSet.cpp
-    tests/Embbeded.cpp
+#    tests/Embbeded.cpp
+#    tests/InSet.cpp
+    tests/Null.cpp
 )
 
 add_dependencies( test pbv )

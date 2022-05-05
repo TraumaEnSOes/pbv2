@@ -9,7 +9,11 @@ namespace details {
 
 struct AsyncExpression { };
 
+#ifdef PBV_SUPPORT_ASYNC
 template< typename T > constexpr bool IsAsyncExpression = std::is_base_of_v< AsyncExpression, T >;
+#else
+template< typename T > constexpr bool IsAsyncExpression = false;
+#endif
 
 } // namespace details.
 

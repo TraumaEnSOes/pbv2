@@ -33,6 +33,40 @@ template< typename PROTO > Evaluable< PROTO > Has( const char *fieldName, int (P
     return lambda;
 }
 
+template< typename PROTO > Evaluable< PROTO > OptionallyHas( const char *fieldName, int (PROTO::*counter)( ) const, int min, int max = 0 ) {
+    auto lambda = [fieldName, counter, min, max]( const PROTO *proto ) {
+        ValidationResult result( true );
+        StaticTrace trace;
+
+        auto count = (proto->*counter)( );
+
+        if( count != 0 ) {
+            if( count < min ) {
+                result.result = false;
+                trace = fieldName;
+                trace << " has( ) less than the minimum";
+                result.traces.error( trace );
+            } else if( ( max != 0 ) && ( count > max ) ) {
+                result.result = false;
+                trace = fieldName;
+                trace << ": has( ) greater than the maximum";
+                result.traces.error( trace );
+            }
+        } else {
+            trace = "Empty field ";
+            trace << fieldName << "; skiping it";
+            result.traces.info( trace );
+        }
+
+        return result;
+    };
+
+    assert( min > 2 );
+    assert( min <= max );
+
+    return lambda;
+}
+
 template< typename PROTO > Evaluable< PROTO > Has( const char *fieldName, bool (PROTO::*has)( ) const, int min = 1, int max = 1 ) {
     auto lambda = [fieldName, has]( const PROTO *proto ) {
         ValidationResult result( (proto->*has)( ) );
