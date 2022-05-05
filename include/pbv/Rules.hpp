@@ -36,6 +36,9 @@ struct BasicRule {
     }
 
 protected:
+#ifdef PBV_SUPPORT_ASYNC
+    bool m_ready = false;
+#endif
     int m_evaluated = 0;
     int m_success = 0;
     TracesStore m_traces;
@@ -43,10 +46,11 @@ protected:
 private:
     int m_total;
 
-    void waitToReady( ) {
-        // TODO
-        m_evaluated = true;
-    }
+#ifdef PBV_SUPPORT_ASYNC
+    void waitToReady( ) noexcept;
+#else
+    void waitToReady( ) noexcept { }
+#endif
 };
 
 template< typename P > struct OptionalRule : public details::BasicRule {
