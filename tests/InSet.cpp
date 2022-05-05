@@ -1,9 +1,11 @@
+#define CATCH_CONFIG_MAIN
+
 #include "FakeProto.hpp"
 
 #include "pbv/Validator.hpp"
 #include "pbv/Sets.hpp"
 
-#include <catch2/catch_test_macros.hpp>
+#include <catch2/catch.hpp>
 
 #include <unordered_set>
 

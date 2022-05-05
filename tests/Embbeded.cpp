@@ -3,7 +3,7 @@
 #include "pbv/Validator.hpp"
 #include "pbv/Embbeded.hpp"
 
-#include <catch2/catch_test_macros.hpp>
+#include <catch2/catch.hpp>
 
 namespace EmbbededTest {
 

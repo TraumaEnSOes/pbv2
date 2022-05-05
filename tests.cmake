@@ -5,4 +5,4 @@ add_executable( test
 )
 
 add_dependencies( test pbv )
-target_link_libraries( test pbv Catch2::Catch2WithMain )
+target_link_libraries( test pbv ${CONAN_LIBS} )

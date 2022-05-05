@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/code/bbva/pbv2/build",
+  "command": "/usr/bin/g++   -I/home/argc/.conan/data/catch2/2.11.1/_/_/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include -I/code/bbva/pbv2/include     -g    -std=c++17 -o CMakeFiles/test.dir/tests/Null.cpp.o -c /code/bbva/pbv2/tests/Null.cpp",
+  "file": "/code/bbva/pbv2/tests/Null.cpp"
+}
+]
