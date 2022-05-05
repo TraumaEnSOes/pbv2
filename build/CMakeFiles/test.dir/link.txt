@@ -1,1 +1,0 @@
-/usr/bin/g++     -g        -rdynamic CMakeFiles/test.dir/tests/Null.cpp.o  -o bin/test   -L/home/argc/.conan/data/catch2/2.11.1/_/_/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/lib  -Wl,-rpath,/home/argc/.conan/data/catch2/2.11.1/_/_/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/lib 
