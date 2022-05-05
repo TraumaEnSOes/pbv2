@@ -1,5 +1,5 @@
 add_executable( test
-#    tests/InSet.cpp
+    tests/InSet.cpp
     tests/Embbeded.cpp
 )
 

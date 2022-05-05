@@ -4,6 +4,7 @@
 #include "pbv/Evaluable.hpp"
 #include "pbv/StaticTrace.hpp"
 #include "pbv/TracesStore.hpp"
+#include "pbv/TypeTraits.hpp"
 
 #include <cassert>
 
@@ -29,6 +30,7 @@ template< typename PROTO, typename TYPE, typename SET > Evaluable< PROTO > InSet
         return result;
     };
 
+    static_assert( std::is_arithmetic_v< TYPE > || std::is_same_v< std::string, details::RemoveCVRefType< TYPE > > );
     assert( !set.empty( ) );
 
     return lambda;

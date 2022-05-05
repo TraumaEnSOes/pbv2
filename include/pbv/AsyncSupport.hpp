@@ -13,9 +13,9 @@ template< typename T > constexpr bool IsAsyncExpression = std::is_base_of_v< Asy
 
 } // namespace details.
 
-void AsyncPrologue( ) { }
+inline void AsyncPrologue( ) { }
 
-void AsyncEpilogue( ) { }
+inline void AsyncEpilogue( ) { }
 
 } // namespace pbv.
 

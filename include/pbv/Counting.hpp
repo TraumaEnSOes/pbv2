@@ -1,5 +1,5 @@
-#ifndef PBV_HAS_HPP
-#define PBV_HAS_HPP
+#ifndef PBV_COUNTING_HPP
+#define PBV_COUNTING_HPP
 
 #include "pbv/Evaluable.hpp"
 #include "pbv/ValidationResult.hpp"

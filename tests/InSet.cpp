@@ -7,6 +7,8 @@
 
 #include <unordered_set>
 
+namespace InSetTest {
+
 class MainValidator : public pbv::Validator< protos::Main > {
     pbv::ValidationResult doValidation( const PROTO *proto ) const override;
 };
@@ -27,9 +29,11 @@ pbv::ValidationResult MainValidator::doValidation( const PROTO *proto ) const {
     return result;
 }
 
+} // namespace InSetTest.
+
 TEST_CASE( "InSet", "[sets]" ) {
     protos::Main mainProto;
-    MainValidator mainProtoValidator;
+    InSetTest::MainValidator mainProtoValidator;
 
     auto result = mainProtoValidator.validate( mainProto );
 

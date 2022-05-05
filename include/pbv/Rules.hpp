@@ -36,12 +36,13 @@ struct BasicRule {
     }
 
 protected:
-    int m_total;
     int m_evaluated = 0;
     int m_success = 0;
     TracesStore m_traces;
 
 private:
+    int m_total;
+
     void waitToReady( ) {
         // TODO
         m_evaluated = true;

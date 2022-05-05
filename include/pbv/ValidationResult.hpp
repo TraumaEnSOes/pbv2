@@ -7,11 +7,6 @@ namespace pbv {
 
 struct ValidationResult {
     ValidationResult( bool status = false ) : result( status ) { }
-    ValidationResult( details::BasicRule &rule ) :
-        result( rule.success( ) ),
-        traces( rule.traces( ) )
-    {
-    }
 
     ValidationResult &operator |=( ValidationResult &other ) {
         result |= other.result;

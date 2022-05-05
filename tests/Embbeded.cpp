@@ -5,6 +5,8 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+namespace EmbbededTest {
+
 class EmbbededValidator : public pbv::Validator< protos::Embbeded > {
     pbv::ValidationResult doValidation( const PROTO *proto ) const override;
 };
@@ -34,9 +36,11 @@ pbv::ValidationResult MainValidator::doValidation( const PROTO *proto ) const {
     return result;
 }
 
+} // namespace EmbbededTest.
+
 TEST_CASE( "InSet", "[sets]" ) {
     protos::Main mainProto;
-    MainValidator mainProtoValidator;
+    EmbbededTest::MainValidator mainProtoValidator;
 
     auto result = mainProtoValidator.validate( mainProto );
 
