@@ -11,8 +11,6 @@ namespace pbv {
 
 namespace details {
 
-struct AsyncExpression;
-
 struct BasicRule {
     BasicRule( int total ) : m_total( total ) { }
 
@@ -36,21 +34,24 @@ struct BasicRule {
     }
 
 protected:
+    static inline void errors2Warnings( TracesStore &traces ) noexcept { traces.errors2Warnings( ); }
+
+    void updateResults( ValidationResult &result, int evaluated = 1 );
+
+private:
+#ifdef PBV_SUPPORT_ASYNC
+    void waitToReady( ) noexcept;
+#else
+    void waitToReady( ) noexcept { }
+#endif
+
+    int m_total;
 #ifdef PBV_SUPPORT_ASYNC
     bool m_ready = false;
 #endif
     int m_evaluated = 0;
     int m_success = 0;
     TracesStore m_traces;
-
-private:
-    int m_total;
-
-#ifdef PBV_SUPPORT_ASYNC
-    void waitToReady( ) noexcept;
-#else
-    void waitToReady( ) noexcept { }
-#endif
 };
 
 template< typename P > struct OptionalRule : public details::BasicRule {
@@ -87,46 +88,18 @@ template< typename P > struct OptionalRule : public details::BasicRule {
     }
 
 private:
-    void evalSingleExpression( const PROTO *proto, const Expression &exp ) { }
-    void evalRepeatedExpressions( const PROTO *proto, ExpressionsList expsList ) { }
-};
+    void evalSingleExpression( const PROTO *proto, const Expression &exp ) {
+        auto result = exp( proto );
 
-template< typename P > struct MandatoryRule : public details::BasicRule {
-    using PROTO = P;
-    using Expression = TemplatizedExpression< PROTO >;
-    using ExpressionsList = std::initializer_list< Expression >;
-
-    MandatoryRule( const PROTO *proto, Expression exp ) :
-        BasicRule( 1 )
-    {
-        evalSingleExpression( proto, std::move( exp ) );
+        BasicRule::errors2Warnings( result.traces );
+        BasicRule::updateResults( result );
     }
 
-    MandatoryRule( bool doEval, const PROTO *proto, Expression exp ) :
-        BasicRule( 1 )
-    {
-        if( doEval ) {
-            evalSingleExpression( proto, std::move( exp ) );
+    void evalRepeatedExpressions( const PROTO *proto, ExpressionsList expsList ) {
+        for( const auto &exp : expsList ) {
+            evalSingleExpression( proto, exp );
         }
     }
-
-    MandatoryRule( const PROTO *proto, ExpressionsList expsList ) :
-        BasicRule( expsList.size( ) )
-    {
-        evalRepeatedExpressions( proto, expsList );
-    }
-
-    MandatoryRule( bool doEval, const PROTO *proto, ExpressionsList expsList ) :
-        BasicRule( expsList.size( ) )
-    {
-        if( doEval ) {
-            evalRepeatedExpressions( proto, expsList );
-        }
-    }
-
-private:
-    void evalSingleExpression( const PROTO *proto, const Expression &exp ) { }
-    void evalRepeatedExpressions( const PROTO *proto, ExpressionsList expsList ) { }
 };
 
 } // namespace details.

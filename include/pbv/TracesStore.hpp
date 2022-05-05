@@ -26,9 +26,13 @@ struct Trace {
     std::string text;
 };
 
+struct BasicRule;
+
 } // namespace details.
 
 struct TracesStore {
+    friend class details::BasicRule;
+
     TracesStore &operator+=( TracesStore other ) {
         if( !other.m_traces.empty( ) ) {
             m_traces.reserve( m_traces.size( ) + other.m_traces.size( ) );
@@ -42,16 +46,8 @@ struct TracesStore {
         m_traces.push_back( details::Trace( TraceLevel::ERROR, std::move( msg ) ) );
     }
 
-    void warning( std::string msg ) {
-        m_traces.push_back( details::Trace( TraceLevel::WARNING, std::move( msg ) ) );
-    }
-
     void info( std::string msg ) {
         m_traces.push_back( details::Trace( TraceLevel::INFO, std::move( msg ) ) );
-    }
-
-    void debug( std::string msg ) {
-        m_traces.push_back( details::Trace( TraceLevel::DEBUG, std::move( msg ) ) );
     }
 
     auto empty( ) const noexcept { return m_traces.empty( ); }
@@ -64,6 +60,8 @@ struct TracesStore {
     auto cend( ) const noexcept { return m_traces.end( ); }
 
 private:
+    void errors2Warnings( ) noexcept;
+
     std::vector< details::Trace > m_traces;
 };
 
