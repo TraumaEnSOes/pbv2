@@ -15,6 +15,11 @@ template< typename T > constexpr bool IsAsyncExpression = std::is_base_of_v< Asy
 template< typename T > constexpr bool IsAsyncExpression = false;
 #endif
 
+struct AsyncManager {
+    static AsyncManager &singleton( ) noexcept;
+
+};
+
 } // namespace details.
 
 inline void AsyncPrologue( ) { }

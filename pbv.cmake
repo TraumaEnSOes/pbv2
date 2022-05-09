@@ -1,4 +1,6 @@
 add_library( pbv STATIC
+    src/AsyncSupport.cpp
+    src/Dependence.cpp
     src/Rules.cpp
     src/TracesStore.cpp
 )

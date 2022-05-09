@@ -1,6 +1,7 @@
 #ifndef PBV_RULES_HPP
 #define PBV_RULES_HPP
 
+#include "pbv/Dependence.hpp"
 #include "pbv/Expression.hpp"
 
 #include <functional>
@@ -33,6 +34,14 @@ struct BasicRule {
         return m_traces;
     }
 
+    bool isReady( ) const noexcept {
+#ifdef PBV_SUPPORT_ASYNC
+        return m_ready.load( );
+#else
+        return true;
+#endif
+    }
+
 protected:
     static inline void errors2Warnings( TracesStore &traces ) noexcept { traces.errors2Warnings( ); }
 
@@ -47,11 +56,12 @@ private:
 
     int m_total;
 #ifdef PBV_SUPPORT_ASYNC
-    bool m_ready = false;
+    std::atomic_bool m_ready = false;
 #endif
     int m_evaluated = 0;
     int m_success = 0;
     TracesStore m_traces;
+    void *m_vector = nullptr;
 };
 
 template< typename P > struct OptionalRule : public details::BasicRule {
@@ -65,10 +75,10 @@ template< typename P > struct OptionalRule : public details::BasicRule {
         evalSingleExpression( proto, std::move( exp ) );
     }
 
-    OptionalRule( bool doEval, const PROTO *proto, Expression exp ) :
+    OptionalRule( Dependence &&dep, const PROTO *proto, Expression exp ) :
         BasicRule( 1 )
     {
-        if( doEval ) {
+        if( dep.isReady( ) && dep ) {
             evalSingleExpression( proto, std::move( exp ) );
         }
     }

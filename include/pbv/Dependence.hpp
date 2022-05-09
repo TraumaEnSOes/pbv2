@@ -1,6 +1,8 @@
 #ifndef PBV_DEPENDENCE_HPP
 #define PBV_DEPENDENCE_HPP
 
+#include <atomic>
+
 namespace pbv {
 
 namespace details {
@@ -10,53 +12,45 @@ struct BasicRule;
 } // namespace details.
 
 struct Dependence {
+    static constexpr int VERSION = 1;
+
 private:
     enum Operation {
-        ALWAYS = 0,
-        EVAL = 1,
-        NEVAL,
-        EQ,
-        NE,
-        LT,
-        LE,
-        GT,
-        GE
+        OALWAYS = 0,
+        OEVAL,
+        ONEVAL,
+        OEQ,
+        ONE,
+        OLT,
+        OLE,
+        OGT,
+        OGE
     };
 
 public:
-    Dependence( ) :
-        m_target( *static_cast< details::BasicRule * >( nullptr ) ),
-        m_operation( Operation::ALWAYS )
-    {
+    Dependence( details::BasicRule &observed ) : Dependence( observed, Operation::OEVAL ) { }
+
+    bool isReady( ) noexcept {
+        return true;
     }
 
-    Dependence( details::BasicRule &target ) :
-        m_target( target ),
-        m_operation( Operation::LE ),
-        m_value( 1 )
-    {
+    operator int( ) const noexcept {
+        return m_result;
     }
 
-    static Dependence EVAL( details::BasicRule &target ) { return Dependence( target, Operation::EVAL ); }
-    static Dependence NEVAL( details::BasicRule &target ) { return Dependence( target, Operation::NEVAL ); }
-    static Dependence EQ( details::BasicRule &target, int val ) { return Dependence( target, Operation::EQ, val ); }
-    static Dependence NE( details::BasicRule &target, int val ) { return Dependence( target, Operation::NE, val ); }
-    static Dependence LT( details::BasicRule &target, int val ) { return Dependence( target, Operation::LT, val ); }
-    static Dependence LE( details::BasicRule &target, int val ) { return Dependence( target, Operation::LE, val ); }
-    static Dependence GT( details::BasicRule &target, int val ) { return Dependence( target, Operation::GT, val ); }
-    static Dependence GE( details::BasicRule &target, int val ) { return Dependence( target, Operation::GE, val ); }
+    static Dependence EVAL( details::BasicRule &target ) { return Dependence( target, Operation::OEVAL ); }
+    static Dependence NEVAL( details::BasicRule &target ) { return Dependence( target, Operation::ONEVAL ); }
+    static Dependence EQ( details::BasicRule &target, int val ) { return Dependence( target, Operation::OEQ, val ); }
+    static Dependence NE( details::BasicRule &target, int val ) { return Dependence( target, Operation::ONE, val ); }
+    static Dependence LT( details::BasicRule &target, int val ) { return Dependence( target, Operation::OLT, val ); }
+    static Dependence LE( details::BasicRule &target, int val ) { return Dependence( target, Operation::OLE, val ); }
+    static Dependence GT( details::BasicRule &target, int val ) { return Dependence( target, Operation::OGT, val ); }
+    static Dependence GE( details::BasicRule &target, int val ) { return Dependence( target, Operation::OGE, val ); }
 
 private:
-    Dependence( details::BasicRule &target, Operation oper, int val = 0 ):
-        m_target( target ),
-        m_operation( oper ),
-        m_value( val )
-    {
-    }
+    Dependence( details::BasicRule &target, Operation oper, int val = 0 );
 
-    details::BasicRule &m_target;
-    Operation m_operation;
-    int m_value;
+    bool m_result;
 };
 
 } // namespace pbv.
