@@ -3,7 +3,7 @@
 namespace pbv::details {
 
 AsyncManager &AsyncManager::singleton( ) noexcept {
-    AsyncManager instance;
+    static AsyncManager instance;
 
     return instance;
 }
