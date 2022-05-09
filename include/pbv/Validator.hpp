@@ -13,7 +13,6 @@ template< typename P > struct Validator {
     using PROTO = P;
 
     using Optional = details::OptionalRule< PROTO >;
-    using Mandatory = details::MandatoryRule< PROTO >;
 
     virtual ~Validator( ) = default;
 
