@@ -1,7 +1,8 @@
 add_executable( test
+    tests/main.cpp
 #    tests/Embbeded.cpp
-#    tests/InSet.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tests/Null.cpp
+    tests/InSet.cpp
+#    ${CMAKE_CURRENT_SOURCE_DIR}/tests/Null.cpp
 )
 
 add_dependencies( test pbv )

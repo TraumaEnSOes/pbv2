@@ -1,5 +1,3 @@
-#define CATCH_CONFIG_MAIN
-
 #include "FakeProto.hpp"
 
 #include "pbv/Validator.hpp"
