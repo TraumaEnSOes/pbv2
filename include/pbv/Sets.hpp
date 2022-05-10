@@ -31,6 +31,7 @@ template< typename PROTO, typename TYPE, typename SET > Evaluable< PROTO > InSet
     };
 
     static_assert( std::is_arithmetic_v< TYPE > || std::is_same_v< std::string, details::RemoveCVRefType< TYPE > > );
+    static_assert( !std::is_same_v< bool, TYPE >, "It makes no sense to search for a bool in a Set" );
     assert( !set.empty( ) );
 
     return lambda;

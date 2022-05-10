@@ -1,10 +1,8 @@
-#define CATCH_CONFIG_MAIN
-
 #include "pbv/Null.hpp"
 
 #include <catch2/catch.hpp>
 
-namespace NullTest {
+namespace {
 
 template< typename T > struct FakeProto {
     FakeProto( T val ) : notDefaultValue( val ) { }
@@ -17,7 +15,7 @@ template< typename T > struct FakeProto {
     T notDefaultValue;
 };
 
-struct FakeStringProto {
+template< > struct FakeProto< std::string > {
     std::string storedEmpty;
     std::string storedNotEmpty{ "NotEmptyString" };
 
@@ -25,10 +23,10 @@ struct FakeStringProto {
     const std::string &getNoDefault( ) const noexcept { return storedNotEmpty; }
 };
 
-} // namespace NullTest.
+} // namespace.
 
-TEST_CASE( "bool", "[module]" ) {
-    using PROTO = NullTest::FakeProto< bool >;
+TEST_CASE( "BoolNullTest" ) {
+    using PROTO = ::FakeProto< bool >;
 
     PROTO proto( true );
 
@@ -43,81 +41,81 @@ TEST_CASE( "bool", "[module]" ) {
     REQUIRE( result );
 }
 
-TEST_CASE( "int", "[module]" ) {
-    using PROTO = NullTest::FakeProto< int >;
+TEST_CASE( "IntNullTest" ) {
+    using PROTO = ::FakeProto< int >;
 
     PROTO proto( 10 );
 
-    auto exp = pbv::NotNull( "boolType", &PROTO::getDefault );
+    auto exp = pbv::NotNull( "intType", &PROTO::getDefault );
     auto result = exp( &proto );
 
     REQUIRE( !result );
 
-    exp = pbv::NotNull( "boolType", &PROTO::getNoDefault );
+    exp = pbv::NotNull( "intType", &PROTO::getNoDefault );
     result = exp( &proto );
 
     REQUIRE( result );
 }
 
-TEST_CASE( "long", "[module]" ) {
-    using PROTO = NullTest::FakeProto< long >;
+TEST_CASE( "LongNullTest" ) {
+    using PROTO = ::FakeProto< long >;
 
     PROTO proto( 10L );
 
-    auto exp = pbv::NotNull( "boolType", &PROTO::getDefault );
+    auto exp = pbv::NotNull( "longType", &PROTO::getDefault );
     auto result = exp( &proto );
 
     REQUIRE( !result );
 
-    exp = pbv::NotNull( "boolType", &PROTO::getNoDefault );
+    exp = pbv::NotNull( "longType", &PROTO::getNoDefault );
     result = exp( &proto );
 
     REQUIRE( result );
 }
 
-TEST_CASE( "long long", "[module]" ) {
-    using PROTO = NullTest::FakeProto< long long >;
+TEST_CASE( "LongLongNullTest" ) {
+    using PROTO = ::FakeProto< long long >;
 
     PROTO proto( 10LL );
 
-    auto exp = pbv::NotNull( "boolType", &PROTO::getDefault );
+    auto exp = pbv::NotNull( "longlongType", &PROTO::getDefault );
     auto result = exp( &proto );
 
     REQUIRE( !result );
 
-    exp = pbv::NotNull( "boolType", &PROTO::getNoDefault );
+    exp = pbv::NotNull( "longlongType", &PROTO::getNoDefault );
     result = exp( &proto );
 
     REQUIRE( result );
 }
 
-TEST_CASE( "float", "[module]" ) {
-    using PROTO = NullTest::FakeProto< float >;
+TEST_CASE( "FloatNullTest" ) {
+    using PROTO = ::FakeProto< float >;
 
     PROTO proto( 10.0f );
 
-    auto exp = pbv::NotNull( "boolType", &PROTO::getDefault );
+    auto exp = pbv::NotNull( "floatType", &PROTO::getDefault );
     auto result = exp( &proto );
 
     REQUIRE( !result );
 
-    exp = pbv::NotNull( "boolType", &PROTO::getNoDefault );
+    exp = pbv::NotNull( "floatType", &PROTO::getNoDefault );
     result = exp( &proto );
 
     REQUIRE( result );
 }
 
-TEST_CASE( "string", "[module]" ) {
-    using PROTO = NullTest::FakeStringProto;
+TEST_CASE( "StringNullTest" ) {
+    using PROTO = ::FakeProto< std::string >;
 
     PROTO proto;
 
-    auto exp = pbv::NotNull( "boolType", &PROTO::getDefault );
+    auto exp = pbv::NotNull( "stringType", &PROTO::getDefault );
     auto result = exp( &proto );
 
     REQUIRE( !result );
 
-    exp = pbv::NotNull( "boolType", &PROTO::getNoDefault );
+    exp = pbv::NotNull( "stringType", &PROTO::getNoDefault );
     result = exp( &proto );
 
     REQUIRE( result );
