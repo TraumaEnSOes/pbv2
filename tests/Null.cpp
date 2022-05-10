@@ -105,6 +105,38 @@ TEST_CASE( "FloatNullTest" ) {
     REQUIRE( result );
 }
 
+TEST_CASE( "DoubleNullTest" ) {
+    using PROTO = ::FakeProto< double >;
+
+    PROTO proto( 10.0 );
+
+    auto exp = pbv::NotNull( "doubleType", &PROTO::getDefault );
+    auto result = exp( &proto );
+
+    REQUIRE( !result );
+
+    exp = pbv::NotNull( "doubleType", &PROTO::getNoDefault );
+    result = exp( &proto );
+
+    REQUIRE( result );
+}
+
+TEST_CASE( "LongDoubleNullTest" ) {
+    using PROTO = ::FakeProto< long double >;
+
+    PROTO proto( 10.0l );
+
+    auto exp = pbv::NotNull( "longDoubleType", &PROTO::getDefault );
+    auto result = exp( &proto );
+
+    REQUIRE( !result );
+
+    exp = pbv::NotNull( "longDoubleType", &PROTO::getNoDefault );
+    result = exp( &proto );
+
+    REQUIRE( result );
+}
+
 TEST_CASE( "StringNullTest" ) {
     using PROTO = ::FakeProto< std::string >;
 

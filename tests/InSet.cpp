@@ -106,6 +106,22 @@ TEST_CASE( "DoubleInSetTest" ) {
     REQUIRE( result.result == false );
 }
 
+TEST_CASE( "LongDoubleInSetTest" ) {
+    using PROTO = ::FakeProto< long double >;
+
+    std::unordered_set< long double > ValidsValues( { 1.0l, 3.0l, 5.0l, 7.0l } );
+
+    PROTO proto1( 5.0l );
+    auto exp = pbv::InSet( "double", &PROTO::getter, ValidsValues );
+    auto result = exp( &proto1 );
+
+    REQUIRE( result.result == true );
+
+    PROTO proto2( 10.0l );
+    result = exp( &proto2 );
+    REQUIRE( result.result == false );
+}
+
 TEST_CASE( "StringInSetTest" ) {
     using PROTO = ::FakeProto< std::string >;
 
